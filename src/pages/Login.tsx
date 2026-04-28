@@ -22,7 +22,7 @@ export default function Login() {
         
         <div className="bg-white rounded-[32px] p-8 md:p-10 w-full shadow-2xl shadow-black/5 border border-gray-100 text-center">
           <h1 className="text-2xl font-bold mb-2">Bienvenue sur ORI</h1>
-          <p className="text-sm text-gray-500 mb-8 font-medium">L'assistant intelligent pour ton orientation by L'Étudiant</p>
+          <p className="text-sm text-gray-500 mb-8 font-medium">L'assistant intelligent pour ton orientation by l'Étudiant</p>
           
           <div className="flex flex-col gap-4">
             <button 

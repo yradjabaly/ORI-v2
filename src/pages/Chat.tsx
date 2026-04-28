@@ -25,7 +25,7 @@ interface Message {
 
 const SYSTEM_PROMPT = `
 # IDENTITÉ ORI
-Tu es ORI, conseiller d'orientation IA de L'Étudiant. Tu aides les élèves de terminale et de 1ère année du supérieur à prendre une décision d'orientation éclairée.
+Tu es ORI, conseiller d'orientation IA de l'Étudiant. Tu aides les élèves de terminale et de 1ère année du supérieur à prendre une décision d'orientation éclairée.
 
 # DÉTECTION DE MYTHES (MYTHE OU RÉALITÉ)
 Before generating your regular response, check if the user's message contains any of these common French education myths:
@@ -1458,7 +1458,7 @@ ORI:`;
               </div>
             </div>
             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
-              Propulsé par Google Gemini • L'Étudiant
+              Propulsé par Google Gemini • l'Étudiant
             </p>
           </div>
         </div>

@@ -119,7 +119,7 @@ export function RealityTest({
     try {
       await addDoc(collection(db, "checklist"), {
         userId: user.uid,
-        title: "Salon L'Étudiant — Explorer mes formations",
+        title: "Salon l'Étudiant — Explorer mes formations",
         urgence: 'BIENTOT',
         deadline: '01/12/2026',
         done: false,
@@ -272,7 +272,7 @@ export function RealityTest({
               </div>
               <div className="flex gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#FFD100] mt-1.5 flex-shrink-0" />
-                <p className="text-xs text-gray-500 leading-relaxed">Un <span className="font-bold">Salon L'Étudiant</span> te permet de comparer plusieurs formations en un seul déplacement.</p>
+                <p className="text-xs text-gray-500 leading-relaxed">Un <span className="font-bold">Salon l'Étudiant</span> te permet de comparer plusieurs formations en un seul déplacement.</p>
               </div>
             </div>
 

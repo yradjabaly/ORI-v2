@@ -27,7 +27,7 @@ export default function Layout() {
 
       {/* Mobile Header */}
       <header className="md:hidden fixed top-0 w-full bg-white border-b border-gray-100 flex justify-between items-center px-6 py-3 z-40">
-        <h1 className="text-xl font-black text-[#E8002D] font-lexend">ORI by L'Étudiant</h1>
+        <h1 className="text-xl font-black text-[#E8002D] font-lexend">ORI by l'Étudiant</h1>
         <div className="flex gap-4">
           <span className="material-symbols-outlined text-gray-500">notifications</span>
           <span className="material-symbols-outlined text-gray-500">settings</span>

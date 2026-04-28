@@ -28,7 +28,7 @@ export default function Header({ readOnly = false }: HeaderProps) {
             ORI
           </Link>
           <span className="text-gray-500 text-[12px] font-medium mt-1">
-            by L'Étudiant
+            by l'Étudiant
           </span>
         </div>
         

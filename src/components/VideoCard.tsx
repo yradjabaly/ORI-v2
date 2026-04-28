@@ -90,7 +90,7 @@ export default function VideoCard({ videoId, title, type }: VideoCardProps) {
 
       {/* Footer */}
       <div className="px-4 py-2 bg-gray-50 flex items-center justify-between">
-        <span className="text-[10px] text-gray-400">Proposé par L'Étudiant</span>
+        <span className="text-[10px] text-gray-400">Proposé par l'Étudiant</span>
         <span className="text-[10px] text-gray-500 italic">
           {type === 'vismavie' 
             ? 'Découvre le quotidien de ce métier en vidéo'

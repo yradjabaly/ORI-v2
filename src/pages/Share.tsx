@@ -697,7 +697,7 @@ JSON uniquement, sans markdown.`;
 
       <div className="print-only-layout">
         <header className="print-header">
-          <span className="print-logo">ORI by L'Étudiant</span>
+          <span className="print-logo">ORI by l'Étudiant</span>
           <span className="print-subtitle">Rapport d'orientation · {studentName}</span>
         </header>
 
@@ -774,7 +774,7 @@ JSON uniquement, sans markdown.`;
         <footer className="print-footer">
           <span className="print-footer-logo">ORI</span>
           <span className="print-footer-text">
-            par L'Étudiant · Intelligent Orientation Assistant
+            par l'Étudiant · Intelligent Orientation Assistant
           </span>
         </footer>
       </div>

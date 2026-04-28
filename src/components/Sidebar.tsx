@@ -36,7 +36,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       )}>
         {!isCollapsed && (
           <div>
-            <h1 className="text-xl font-black text-[#E8002D] font-lexend tracking-tight">ORI by L'Étudiant</h1>
+            <h1 className="text-xl font-black text-[#E8002D] font-lexend tracking-tight">ORI by l'Étudiant</h1>
             <p className="text-[12px] font-medium text-gray-500 font-lexend uppercase tracking-wider">Accompagnement orientation</p>
           </div>
         )}
