@@ -1,0 +1,172 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A student user of the ORI app",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "class": { "type": "string" },
+        "track": { "type": "string" },
+        "swipeProfile": { "type": "string" },
+        "emotionalState": { "type": "string" },
+        "lastSessionSummary": { "type": "string" },
+        "shortlist": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "eliminationProfile": { "type": "string" },
+        "wordCloudResults": { "type": "string" },
+        "profileTraits": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "profileInsight": { "type": "string" },
+        "shortlistAnalysis": { "type": "object" },
+        "lastDashboardGenAt": { "type": "string" },
+        "lastProfileGenAt": { "type": "string" },
+        "parentPageCache": { "type": "object" },
+        "parentPageCacheDate": { "type": "string" },
+        "updatedAt": { "type": "object" },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "A conversation session for a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "mode": { "type": "string" },
+        "summary": { "type": "string" },
+        "messages": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "shortlist": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "createdAt": { "type": "object" }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "ChecklistItem": {
+      "title": "Checklist Item",
+      "description": "An action item on the user's checklist",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "deadline": { "type": "string" },
+        "urgence": { "type": "string" },
+        "done": { "type": "boolean" },
+        "guideUrl": { "type": "string" }
+      },
+      "required": ["userId", "title", "done"]
+    },
+    "Formation": {
+      "title": "Formation",
+      "description": "Academic formation configuration",
+      "type": "object",
+      "properties": {
+        "nom": { "type": "string" },
+        "duree": { "type": "number" },
+        "cout": { "type": "number" },
+        "alternance": { "type": "boolean" },
+        "selectivite": { "type": "number" },
+        "salaireJunior": { "type": "number" },
+        "type": { "type": "string" },
+        "localisation": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["nom"]
+    },
+    "Etablissement": {
+      "title": "Etablissement",
+      "description": "School information",
+      "type": "object",
+      "properties": {
+        "nom": { "type": "string" },
+        "formationId": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "alternance": { "type": "boolean" },
+        "criteresMax": { "type": "number" }
+      },
+      "required": ["nom", "formationId"]
+    },
+    "ShareComment": {
+      "title": "Share Comment",
+      "description": "A message left by a relative on the share page",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "object" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["userId", "authorName", "content", "createdAt", "read"]
+    },
+    "Voeu": {
+      "title": "Voeu Parcoursup",
+      "description": "Information about a wish in Parcoursup",
+      "type": "object",
+      "properties": {
+        "nom": { "type": "string" },
+        "ville": { "type": "string" },
+        "selectivite": { "type": "number" },
+        "moyenneAdmis": { "type": "number" },
+        "grilleCEV": {
+          "type": "object",
+          "properties": {
+            "resultats": { "type": "number" },
+            "motivation": { "type": "number" },
+            "methodes": { "type": "number" },
+            "savoirEtre": { "type": "number" }
+          }
+        },
+        "bonusSpecialites": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["nom", "ville", "selectivite", "moyenneAdmis", "grilleCEV"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile data"
+    },
+    "/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/Session" },
+      "description": "Chat sessions assigned to users"
+    },
+    "/checklist/{itemId}": {
+      "schema": { "$ref": "#/entities/ChecklistItem" },
+      "description": "Checklist items assigned to users"
+    },
+    "/formations/{formationId}": {
+      "schema": { "$ref": "#/entities/Formation" },
+      "description": "Global dictionary of formations"
+    },
+    "/etablissements/{etablissementId}": {
+      "schema": { "$ref": "#/entities/Etablissement" },
+      "description": "Global dictionary of schools"
+    },
+    "/shareComments/{commentId}": {
+      "schema": { "$ref": "#/entities/ShareComment" },
+      "description": "Comments left on share pages"
+    },
+    "/voeux/{voeuId}": {
+      "schema": { "$ref": "#/entities/Voeu" },
+      "description": "Available formations for Parcoursup evaluation"
+    }
+  }
+}

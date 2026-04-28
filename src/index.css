@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #b90022;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #e8002d;
+  --color-on-primary-container: #fffaf9;
+  
+  --color-secondary: #325da4;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #8cb3ff;
+  --color-on-secondary-container: #0e4489;
+  
+  --color-tertiary: #725c00;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #cda800;
+  --color-on-tertiary-container: #4e3e00;
+
+  --color-surface: #f9f9f9;
+  --color-on-surface: #1a1c1c;
+  --color-surface-variant: #e2e2e2;
+  --color-on-surface-variant: #5e3f3d;
+  
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-background: #f9f9f9;
+  --color-on-background: #1a1c1c;
+
+  --font-lexend: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-lexend text-base;
+  }
+}

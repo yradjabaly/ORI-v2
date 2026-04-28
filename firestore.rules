@@ -1,0 +1,167 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Deny
+    match /{document=**} { 
+      allow read, write: if false; 
+    }
+    
+    // Primitives
+    function isValidId(id) { 
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { 
+      return request.auth != null; 
+    }
+    function isAdmin() { 
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); 
+    }
+    function isKeyUpdated(key) {
+      return incoming().diff(existing()).affectedKeys().contains(key);
+    }
+
+    // Collection: Users
+    function isValidUser(data) {
+      return data.keys().hasAll(['name', 'email', 'createdAt'])
+        && data.name is string && data.name.size() <= 100
+        && data.email is string && data.email.size() <= 100
+        && data.get('class', '') is string
+        && data.get('track', '') is string
+        && data.get('swipeProfile', '') is string
+        && data.get('emotionalState', '') is string
+        && (data.get('updatedAt', null) == null || data.get('updatedAt', null) is timestamp);
+    }
+
+    match /users/{userId} {
+      allow get: if isValidId(userId);
+      allow list: if isSignedIn() && request.auth.uid == userId;
+      allow create: if isSignedIn() 
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && isValidUser(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if isSignedIn() 
+        && request.auth.uid == userId
+        && isValidId(userId)
+        && incoming().createdAt == existing().createdAt
+        && (
+          (incoming().diff(existing()).affectedKeys().hasOnly([
+             'name', 'class', 'track', 'sectors', 'subjects', 'mobility', 'swipeProfile', 'swipeProfileRaw',
+             'wordCloudResults', 'wordCloudSummary', 'eliminationProfile', 'eliminationSummary',
+             'profileTraits', 'profileInsight', 'emotionalState', 'shortlist', 
+             'shortlistAnalysis', 'lastSessionSummary', 'lastDashboardGenAt', 'lastProfileGenAt', 
+             'parentPageCache', 'parentPageCacheDate', 'updatedAt'
+           ]))
+        )
+        && (!isKeyUpdated('updatedAt') || incoming().updatedAt == request.time);
+    }
+
+    // Collection: Sessions
+    function isValidSession(data) {
+      return data.keys().hasAll(['userId', 'createdAt'])
+        && isValidId(data.userId)
+        && data.get('mode', '') is string
+        && (data.get('summary', null) == null || data.get('summary', null) is string)
+        && data.get('messages', []) is list
+        && data.get('shortlist', []) is list
+        && (data.get('updatedAt', null) == null || data.get('updatedAt', null) is timestamp);
+    }
+
+    match /sessions/{sessionId} {
+      allow get: if (isSignedIn() && existing().userId == request.auth.uid) || (existing().shared == true);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn()
+        && isValidId(sessionId)
+        && (incoming().userId == request.auth.uid)
+        && isValidSession(incoming())
+        && incoming().createdAt == request.time;
+        
+      allow update: if isSignedIn()
+        && isValidId(sessionId)
+        && (existing().userId == request.auth.uid || isAdmin())
+        && incoming().createdAt == existing().createdAt
+        && (
+          // Action: Sync messages & mode
+          (incoming().diff(existing()).affectedKeys().hasOnly(['messages', 'mode', 'summary', 'updatedAt']))
+          || (incoming().diff(existing()).affectedKeys().hasOnly(['shortlist', 'updatedAt']))
+          || (incoming().diff(existing()).affectedKeys().hasOnly(['shared', 'updatedAt']))
+        )
+        && (!isKeyUpdated('updatedAt') || incoming().updatedAt == request.time);
+    }
+
+    // Collection: Checklist
+    function isValidChecklist(data) {
+      return data.keys().hasAll(['userId', 'title', 'done', 'createdAt'])
+        && isValidId(data.userId)
+        && data.title is string && data.title.size() <= 200
+        && data.done is bool
+        && (data.get('updatedAt', null) == null || data.get('updatedAt', null) is timestamp);
+    }
+
+    match /checklist/{itemId} {
+      allow list: if (isSignedIn() && resource.data.userId == request.auth.uid) || (resource.data.userId != null);
+      allow get: if isValidId(itemId) && (existing().userId == request.auth.uid || resource.data.userId != null);
+      
+      allow create: if isSignedIn()
+        && isValidId(itemId)
+        && (incoming().userId == request.auth.uid)
+        && isValidChecklist(incoming())
+        && incoming().createdAt == request.time;
+      
+      allow update: if isSignedIn()
+        && isValidId(itemId)
+        && existing().userId == request.auth.uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'deadline', 'urgence', 'done', 'guideUrl', 'completedAt', 'updatedAt', 'source'])
+        && (!isKeyUpdated('updatedAt') || incoming().updatedAt == request.time);
+        
+      allow delete: if isSignedIn() && isValidId(itemId) && existing().userId == request.auth.uid;
+    }
+
+    // Collection: ShareComments
+    function isValidShareComment(data) {
+      return data.keys().hasAll(['userId', 'authorName', 'content', 'createdAt', 'read'])
+        && isValidId(data.userId)
+        && data.authorName is string && data.authorName.size() <= 100
+        && data.content is string && data.content.size() <= 1000
+        && data.read is bool
+        && (data.get('updatedAt', null) == null || data.get('updatedAt', null) is timestamp);
+    }
+
+    match /shareComments/{commentId} {
+      allow list: if true;
+      allow get: if true;
+      
+      allow create: if isValidId(commentId)
+        && isValidShareComment(incoming())
+        && incoming().createdAt == request.time
+        && incoming().read == false;
+      
+      allow update: if isSignedIn()
+        && (existing().userId == request.auth.uid || isAdmin())
+        && incoming().diff(existing()).affectedKeys().hasOnly(['read', 'updatedAt'])
+        && (!isKeyUpdated('updatedAt') || incoming().updatedAt == request.time);
+
+      allow delete: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+    }
+
+    // Global Collections (Public read)
+    match /formations/{formationId} {
+      allow get: if isValidId(formationId);
+      allow list: if true;
+    }
+    match /etablissements/{etablissementId} {
+      allow get: if isValidId(etablissementId);
+      allow list: if true;
+    }
+    match /voeux/{voeuxId} {
+      allow get: if isValidId(voeuxId);
+      allow list: if isSignedIn();
+    }
+  }
+}
