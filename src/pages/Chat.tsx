@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 import { db, handleFirestoreError } from '../lib/firebase';
 import { collection, query, where, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 
 // Types
 type Role = 'ori' | 'user';
@@ -457,7 +457,7 @@ ORI:`;
       // 2. Call Gemini
       const aiInstance = getGemini();
       const response = await aiInstance.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: fullPrompt,
       });
       const rawText = response.text || "";
@@ -652,7 +652,7 @@ ORI:`;
 
             const aiInstance = getGemini();
             const sumResp = await aiInstance.models.generateContent({
-              model: "gemini-flash-latest",
+              model: GEMINI_MODEL,
               contents: sumPrompt,
             });
             const rawOutput = sumResp.text || "";

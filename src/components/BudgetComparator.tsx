@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Loader2, TrendingUp, Info, ChevronRight, Calculator, PieChart, Home, Wallet } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
@@ -104,7 +104,7 @@ Règles:
 - Toutes les valeurs en euros entiers`;
 
       const response = await aiInstance.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: prompt
       });
 

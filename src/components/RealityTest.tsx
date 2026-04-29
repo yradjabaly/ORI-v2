@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, CheckCircle2, Calendar, LayoutGrid } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -40,7 +40,7 @@ export function RealityTest({
       const prompt = `Tu es ORI. Génère exactement 3 scénarios réalistes et difficiles que vit un étudiant en ${formationName}. Ces scénarios doivent montrer les vrais défis du quotidien (pas les avantages). Format JSON: ["scénario 1", "scénario 2", "scénario 3"] Chaque scénario: 2 phrases max, situation concrète et difficile, commence par "Il est..." ou "Tu es..." ou "C'est..." Retourne uniquement le JSON.`;
       
       const response = await aiInstance.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: prompt
       });
       

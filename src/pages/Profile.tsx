@@ -3,7 +3,7 @@ import { db, handleFirestoreError } from '../lib/firebase';
 import { doc, onSnapshot, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { cn } from '../lib/utils';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { format } from 'date-fns';
 import { Loader2, RefreshCw, Sparkles } from 'lucide-react';
 import { SwipeCards } from '../components/SwipeCards';
@@ -33,7 +33,7 @@ export default function Profile() {
       // 1. Regenerate Traits
       const traitsPrompt = `Traduis ce profil d'orientation '${userData.swipeProfile}' en 3-4 traits naturels en français pour un lycéen. Exemple: ['Apprend en faisant', 'Veut entrer vite dans la vie active']. JSON array uniquement.`;
       const traitsRes = await genAI.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: traitsPrompt
       });
       const traitsText = traitsRes.text.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -42,7 +42,7 @@ export default function Profile() {
       // 2. Regenerate Insight
       const insightPrompt = `Basé sur ce profil : "${userData.swipeProfile}", donne un conseil d'une phrase (15-20 mots max) sur le type d'environnement de travail qui lui correspondrait le mieux. Texte pur.`;
       const insightRes = await genAI.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: insightPrompt
       });
       const insight = insightRes.text.trim();

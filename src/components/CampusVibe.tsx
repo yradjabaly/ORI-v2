@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Loader2, Target, Info } from 'lucide-react';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { cn } from '../lib/utils';
 
 interface CampusVibeProps {
@@ -99,7 +99,7 @@ Retourne UNIQUEMENT ce JSON:
 }`;
         
         const response = await aiInstance.models.generateContent({
-          model: "gemini-flash-latest",
+          model: GEMINI_MODEL,
           contents: prompt
         });
 

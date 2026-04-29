@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Loader2, ArrowRight, GraduationCap, Briefcase, MapPin } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -80,7 +80,7 @@ export const LinkedInPathway: React.FC<LinkedInPathwayProps> = ({
         Génère 3 stats de débouchés réalistes et 1 parcours fictif mais plausible. Disclaimer: 'Données générées à titre illustratif'.`;
 
         const result = await genAI.models.generateContent({
-          model: "gemini-flash-latest",
+          model: GEMINI_MODEL,
           contents: prompt,
         });
         const text = result.text.replace(/```json/g, '').replace(/```/g, '').trim();

@@ -1,5 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 
+export const GEMINI_MODEL = "gemini-3.1-flash-lite-preview";
+
 let aiInstance: GoogleGenAI | null = null;
 
 export function getGemini() {

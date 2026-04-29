@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Type } from '@google/genai';
 import { Check, AlertTriangle, ChevronDown, ChevronUp, Loader2, Info } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -117,7 +117,7 @@ Return as JSON only.`;
 
           const aiInstance = getGemini();
           const response = await aiInstance.models.generateContent({
-            model: "gemini-flash-latest",
+            model: GEMINI_MODEL,
             contents: prompt,
             config: {
               responseMimeType: "application/json",

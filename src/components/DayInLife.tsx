@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Type, Schema } from '@google/genai';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { resolveEntity } from '../lib/resolveEntity';
@@ -91,7 +91,7 @@ Base-toi sur des emplois du temps réels et typiques. Rends le contenu engageant
 
         const aiInstance = getGemini();
         const response = await aiInstance.models.generateContent({
-          model: "gemini-flash-latest",
+          model: GEMINI_MODEL,
           contents: prompt,
           config: {
             responseMimeType: "application/json",

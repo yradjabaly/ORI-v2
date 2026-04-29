@@ -8,7 +8,7 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Loader2, Search, X, Check, AlertCircle, TrendingUp, ShieldCheck, Target } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
@@ -140,7 +140,7 @@ Retourne UNIQUEMENT ce JSON:
 }`;
 
       const response = await aiInstance.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: prompt
       });
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
 import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { Sparkles, MapPin, Briefcase, Heart, AlertCircle, ArrowRight } from 'lucide-react';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 
 // We initialize a new specific model for this specific generation. 
 // A production app might pass the instance down, but this ensures it works instantly here.
@@ -85,7 +85,7 @@ export function FlashForward({ formationIds, onComplete, sessionId, messageId, i
 
     const aiInstance = getGemini();
     const response = await aiInstance.models.generateContent({
-      model: "gemini-flash-latest",
+      model: GEMINI_MODEL,
       contents: prompt,
     });
 

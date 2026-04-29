@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { doc, getDoc, updateDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Type, Schema } from '@google/genai';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { Loader2, X } from 'lucide-react';
 
 interface PlanActionProps {
@@ -75,7 +75,7 @@ Include 5 checklist items. Base deadlines on Parcoursup calendar. Return JSON on
 
         const aiInstance = getGemini();
         const response = await aiInstance.models.generateContent({
-          model: "gemini-flash-latest",
+          model: GEMINI_MODEL,
           contents: prompt,
           config: {
             responseMimeType: "application/json",

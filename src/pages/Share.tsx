@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { db, auth } from '../lib/firebase';
 import { doc, getDoc, collection, query, where, orderBy, limit, getDocs, updateDoc, deleteField, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { Loader2, MessageCircle, Printer, Calendar, ArrowRight, RefreshCw, Send, Check } from 'lucide-react';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import Header from '../components/Header';
 import { cn } from '../lib/utils';
 import { handleFirestoreError } from '../lib/firebase';
@@ -131,7 +131,7 @@ JSON uniquement, sans markdown.`;
 
       const genAI = getGemini();
       const result = await genAI.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: prompt,
       });
       const text = result.text.replace(/```json/g, '').replace(/```/g, '').trim();

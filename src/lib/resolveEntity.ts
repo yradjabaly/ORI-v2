@@ -1,7 +1,7 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from './firebase';
-import { getGemini } from './gemini';
+import { getGemini, GEMINI_MODEL } from './gemini';
 
 export interface ResolvedEntity {
   id: string;
@@ -59,7 +59,7 @@ export async function resolveEntity(queryStr: string): Promise<ResolvedEntity> {
   let classification: ClassifierOutput;
   try {
     const result = await gemini.models.generateContent({
-      model: "gemini-flash-latest",
+      model: GEMINI_MODEL,
       contents: classificationPrompt
     });
     const text = (result.text || "").replace(/```json|```/g, '').trim();
@@ -123,7 +123,7 @@ export async function resolveEntity(queryStr: string): Promise<ResolvedEntity> {
 
   try {
     const result = await gemini.models.generateContent({
-      model: "gemini-flash-latest",
+      model: GEMINI_MODEL,
       contents: dataPrompt
     });
     const text = (result.text || "").replace(/```json|```/g, '').trim();

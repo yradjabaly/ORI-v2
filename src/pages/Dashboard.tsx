@@ -13,7 +13,7 @@ import {
   Check, MapPin, RefreshCw, AlertTriangle
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { getGemini } from '../lib/gemini';
+import { getGemini, GEMINI_MODEL } from '../lib/gemini';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
@@ -201,7 +201,7 @@ export default function Dashboard() {
     try {
       const genAI = getGemini();
       const res = await genAI.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: `Traduis ce profil d'orientation '${userData.swipeProfile}' en 3-4 traits naturels en français pour un lycéen. Exemple: ['Apprend en faisant', 'Veut entrer vite dans la vie active']. JSON array uniquement.`
       });
       const resText = (res.text || "").replace(/```json/g, '').replace(/```/g, '').trim();
@@ -239,7 +239,7 @@ Chaque item: max 6 mots, concret et spécifique.
 JSON uniquement.`;
 
       const res = await genAI.models.generateContent({
-        model: "gemini-flash-latest",
+        model: GEMINI_MODEL,
         contents: prompt
       });
       
@@ -296,7 +296,7 @@ JSON uniquement.`;
         const prompt = `Résume en une phrase ce que cet élève a exploré dans cette conversation. Maximum 12 mots. Commence par un verbe d'action à la 3ème personne. Exemple: 'A comparé le BUT MMI et le BTS SIO en détail.' Texte uniquement, sans guillemets.\n\nConversation:\n${firstMessages}`;
         
         const res = await genAI.models.generateContent({
-          model: "gemini-flash-latest",
+          model: GEMINI_MODEL,
           contents: prompt
         });
         
