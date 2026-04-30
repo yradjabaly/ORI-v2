@@ -446,13 +446,12 @@ export default function Chat() {
 
       let historyContext = recentMessages.map((m: any) => `${m.role === 'ori' ? 'ORI' : 'Eleve'}: ${m.content}`).join("\n");
       
-      const fullPrompt = `${prompt}
+      const ragContext = await fetchRAGContext(text);
+      const ragSection = ragContext
+        ? `\n\nINFORMATION VÉRIFIÉE (source L'Étudiant — utilise ces données en priorité):\n${ragContext}\n`
+        : '';
 
-Historique récent:
-${historyContext}
-
-Eleve (Mode: ${mode}): ${text}
-ORI:`;
+      const fullPrompt = `${prompt}${ragSection}\n\nHistorique récent:\n${historyContext}\nEleve (Mode: ${mode}): ${text}\nORI:`;
 
       // 2. Call Gemini
       const aiInstance = getGemini();
@@ -721,6 +720,31 @@ ORI:`;
         uiTrigger: null,
         mythText: undefined
       };
+    }
+  };
+
+  const fetchRAGContext = async (message: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/rag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message,
+          thread_id: (sessionId || sessionIdRef.current) || 'default'
+        })
+      });
+      if (!response.ok) return '';
+      const data = await response.json();
+      const raw = data.result || '';
+      // Clean separator characters and token metadata
+      const cleaned = raw
+        .replace(/\u241f/g, '')
+        .replace(/\{"input_tokens_count":.*\}$/, '')
+        .trim();
+      console.log('[RAG]', cleaned ? cleaned.slice(0, 200) : 'empty');
+      return cleaned;
+    } catch {
+      return '';
     }
   };
 
