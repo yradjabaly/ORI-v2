@@ -19,8 +19,7 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({
     name: '',
     class: '',
-    sectors: '',
-    subjects: '',
+    track: '',
     mobility: ''
   });
 
@@ -70,8 +69,7 @@ export default function Profile() {
         setEditForm({
           name: data.name || '',
           class: data.class || '',
-          sectors: Array.isArray(data.sectors) ? data.sectors.join(', ') : data.sectors || '',
-          subjects: Array.isArray(data.subjects) ? data.subjects.join(', ') : data.subjects || '',
+          track: data.track || '',
           mobility: data.mobility || ''
         });
 
@@ -89,8 +87,7 @@ export default function Profile() {
       await updateDoc(doc(db, "users", user.uid), {
         name: editForm.name,
         class: editForm.class,
-        sectors: editForm.sectors.split(',').map(s => s.trim()).filter(Boolean),
-        subjects: editForm.subjects.split(',').map(s => s.trim()).filter(Boolean),
+        track: editForm.track,
         mobility: editForm.mobility,
         updatedAt: serverTimestamp()
       });
@@ -103,9 +100,9 @@ export default function Profile() {
   const calculateProgress = () => {
     if (!userData) return 0;
     const fields = [
+      userData.name,
       userData.class,
-      userData.sectors?.length > 0,
-      userData.subjects?.length > 0,
+      userData.track,
       userData.mobility,
       userData.swipeProfile,
       userData.profileTraits?.length > 0,
@@ -184,11 +181,6 @@ export default function Profile() {
                 </div>
               ) : (
                 <>
-                  {userData?.swipeProfile && (
-                    <p className="text-sm text-gray-700 italic border-l-4 border-[#325da4] pl-4 py-1 leading-relaxed">
-                      "{userData.swipeProfile}"
-                    </p>
-                  )}
                   {userData?.profileInsight && (
                     <p className="text-xs text-blue-600 bg-blue-50/50 p-3 rounded-xl border border-blue-100/50 leading-relaxed">
                       <span className="font-bold flex items-center gap-1 mb-1">
@@ -234,12 +226,8 @@ export default function Profile() {
                 value={userData?.class || 'Non renseigné'} 
               />
               <DataItem 
-                label="SECTEURS ENVISAGÉS" 
-                value={Array.isArray(userData?.sectors) ? userData.sectors.join(', ') : userData?.sectors || 'Non renseigné'} 
-              />
-              <DataItem 
-                label="MATIÈRES FORTES" 
-                value={Array.isArray(userData?.subjects) ? userData.subjects.join(', ') : userData?.subjects || 'Non renseigné'} 
+                label="FILIÈRE" 
+                value={userData?.track || 'Non renseigné'} 
               />
               <DataItem 
                 label="MOBILITÉ GÉOGRAPHIQUE" 
@@ -302,20 +290,11 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">SECTEURS ENVISAGÉS (séparés par virgule)</label>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">FILIÈRE</label>
                 <input 
                   type="text" 
-                  value={editForm.sectors}
-                  onChange={(e) => setEditForm(prev => ({...prev, sectors: e.target.value}))}
-                  className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#E8002D] outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">MATIÈRES FORTES (séparés par virgule)</label>
-                <input 
-                  type="text" 
-                  value={editForm.subjects}
-                  onChange={(e) => setEditForm(prev => ({...prev, subjects: e.target.value}))}
+                  value={editForm.track}
+                  onChange={(e) => setEditForm(prev => ({...prev, track: e.target.value}))}
                   className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#E8002D] outline-none"
                 />
               </div>

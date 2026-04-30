@@ -33,7 +33,17 @@ export function RealityTest({
   const [jpoAdded, setJpoAdded] = useState(false);
   const [salonAdded, setSalonAdded] = useState(false);
 
-  const startTest = async () => {
+  const handleStart = async () => {
+    // If questions already exist in initialData, use them directly
+    if (initialData?.questions && initialData.questions.length >= 3) {
+      const qs = initialData.questions.map((q: any) =>
+        typeof q === 'string' ? q : q.text || q
+      );
+      setQuestions(qs);
+      setStep('question');
+      return;
+    }
+
     setLoading(true);
     try {
       const aiInstance = getGemini();
@@ -163,7 +173,7 @@ export function RealityTest({
               3 situations concrètes que tu vivras en <span className="font-bold text-gray-900">{formationName}</span>. Réponds franchement.
             </p>
             <button
-              onClick={startTest}
+              onClick={handleStart}
               className="bg-[#E8002D] text-white font-bold py-3 px-8 rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all text-sm"
             >
               Je me lance →

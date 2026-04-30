@@ -38,6 +38,23 @@ export default function Checklist() {
     return () => unsub();
   }, [user]);
 
+  const printStyle = `
+    @media print {
+      body * { visibility: hidden; }
+      #checklist-print, #checklist-print * { visibility: visible; }
+      #checklist-print { position: fixed; top: 0; left: 0; width: 100%; }
+      button, nav, aside { display: none !important; }
+    }
+  `;
+
+  const handleExportPDF = () => {
+    const style = document.createElement('style');
+    style.innerHTML = printStyle;
+    document.head.appendChild(style);
+    window.print();
+    document.head.removeChild(style);
+  };
+
   const toggleItem = async (id: string, isDone: boolean) => {
     try {
       const today = new Date().toLocaleDateString('fr-FR');
@@ -49,10 +66,6 @@ export default function Checklist() {
     } catch (err) {
       handleFirestoreError(err, 'update', `checklist/${id}`);
     }
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   const addTask = async () => {
@@ -179,16 +192,6 @@ export default function Checklist() {
 
   return (
     <div className="w-full h-full pb-24 print:bg-white print:h-auto font-lexend">
-      <style>{`
-        @media print {
-          nav, header, aside, .print-hidden, button, .print-hidden-all, .dropdown-menu { display: none !important; }
-          .print-only { display: block !important; }
-          .print-list { display: block !important; width: 100% !important; margin: 0 !important; padding: 0 !important; }
-          body { background: white !important; }
-          .checklist-item { border: 1px solid #eee !important; margin-bottom: 10px !important; border-radius: 12px !important; break-inside: avoid; }
-          .print-visible { opacity: 1 !important; grayscale: 0 !important; }
-        }
-      `}</style>
       <div className="max-w-[1000px] mx-auto px-6 pt-10 flex flex-col gap-8">
         
         {/* HEADER */}
@@ -220,7 +223,7 @@ export default function Checklist() {
             </div>
             
             <button 
-              onClick={handlePrint}
+              onClick={handleExportPDF}
               className="flex items-center gap-2 bg-white border border-gray-200 text-gray-600 font-bold px-4 py-2.5 rounded-xl hover:bg-gray-50 transition-colors text-xs"
             >
               <Printer className="w-4 h-4" />
@@ -329,7 +332,7 @@ export default function Checklist() {
         )}
 
         {viewMode === 'list' ? (
-          <div className="flex flex-col gap-12">
+          <div id="checklist-print" className="flex flex-col gap-12">
             {/* TASKS TO DO SECTION */}
             <section className="flex flex-col gap-6">
               <div className="flex items-center gap-3">
@@ -480,7 +483,7 @@ export default function Checklist() {
             )}
           </div>
         ) : (
-          <div className="flex flex-col gap-16 pb-20">
+          <div id="checklist-print" className="flex flex-col gap-16 pb-20">
             {Object.keys(itemsByMonth).map(month => (
               <section key={month} className="flex flex-col gap-6">
                 <div className="flex items-center gap-3 border-b border-gray-100 pb-4">
