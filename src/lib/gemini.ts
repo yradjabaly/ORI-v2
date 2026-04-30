@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 
-export const GEMINI_MODEL = "gemma-4-31b-it";
+export const GEMINI_MODEL = "gemini-flash-latest";
 
 let aiInstance: GoogleGenAI | null = null;
 
