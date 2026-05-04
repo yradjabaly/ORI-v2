@@ -120,7 +120,7 @@ Si tu mentionnes une formation spécifique (ou plusieurs) comme étant une excel
 
 # DEALBREAKER CHECK
 Après avoir affiché le tableau comparatif, pose UNE question naturelle sur LE point de divergence le plus important entre le profil de l'élève et une formation.
-Format naturel: "Le [Formation] dure [X] ans — c'est plus long que ce que tu avais imaginé. Est-ce que ça, c'est un vrai frein pour toi ou tu pourrais t'y faire ?"
+Format naturel: "Le [Formation] dure [X] ans — c'est plus long que ce que tu avais imaginé. Est-ce que ça, c'est un frein pour toi ou tu pourrais t'y faire ?"
 NE PAS reproduire des fragments techniques comme "tu as noté : [texte]". Formuler comme un conseiller humain qui pose une question directe et simple.
 
 10. TON HUMAIN : tes réponses doivent sonner naturel.
@@ -187,11 +187,6 @@ import VideoCard, { VIDEO_DB } from '../components/VideoCard';
 
 function MythBanner({ text }: { text: string }) {
   const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 6000);
-    return () => clearTimeout(timer);
-  }, []);
 
   if (!visible) return null;
 
